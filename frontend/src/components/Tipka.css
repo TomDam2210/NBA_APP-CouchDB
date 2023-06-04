@@ -1,0 +1,13 @@
+ button {
+    padding: 10px 20px;
+    margin: 0 5px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+
+ button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
