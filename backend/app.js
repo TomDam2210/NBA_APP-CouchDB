@@ -46,6 +46,22 @@ app.get('/api/players', (req,res) => {
         
 })
 
+app.post('/api/players/search', (req, res) => {
+    const { page, pageSize } = req.query;
+    const skip = (page - 1) * pageSize;
+    const query = req.body;
+  
+    couch.mango(dbName, query)
+      .then(({ data }) => {
+        console.log(data.docs);
+        res.json(data.docs);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+      });
+  });
+
 app.listen(3001, () => {
     console.log("Server je pokrenut!")
 })

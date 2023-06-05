@@ -10,14 +10,20 @@ const App = () => {
     const [players, setPlayers] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [searchPlayer, setSearchPlayer] = useState("")
+    const [searchResults, setSearchResults] = useState([])
     const pageSize = 10
     //const [totalPages, setTotalPages] = useState(0)
 
     useEffect(() => {
-        getPlayers()
-    },[currentPage])
+        if (searchPlayer === '') {
+          getPlayers();
+        } else {
+          searchPlayers();
+        }
+      }, [currentPage, searchPlayer]);
 
     const getPlayers = () => {
+        if(searchPlayer === '') {
         axios.get('http://localhost:3001/api/players', {
             params: {
                 page: currentPage,
@@ -32,10 +38,34 @@ const App = () => {
             console.error(error)
         })
     }
+    }
 
-    const handleSearch = (e) => {
-        setSearchPlayer((e.target.value).toString())
-        console.log(searchPlayer)
+    const searchPlayers = () => {
+        const query = {
+          selector: {
+            Player: {
+              $regex: `(?i)${searchPlayer}`
+            }
+          },
+          limit: pageSize,
+          skip: (currentPage - 1) * pageSize
+        };
+    
+        axios
+          .post('http://localhost:3001/api/players/search', query)
+          .then((response) => {
+            console.log(response.data);
+            setSearchResults(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+
+    const handleSearch = () => {
+        setCurrentPage(1)
+        /*setSearchPlayer((e.target.value).toString())
+        console.log(searchPlayer)*/
     }
 
     const handleNextPage = () => {
@@ -60,10 +90,10 @@ return (
                 type="text"
                 placeholder="Pretraži igrače..."
                 value={searchPlayer}
-                onChange={handleSearch}
+                onChange={(e) => setSearchPlayer(e.target.value)}
             >
             </input>
-            <button>Pretraži</button>
+            <button onClick={handleSearch}>Pretraži</button>
         </div>
         <table>
             <thead>
@@ -78,10 +108,13 @@ return (
                 </tr>
             </thead>
             <tbody>
-                {
-                    players.map(player => ( 
+                {searchPlayer === ''
+                    ? players.map((player) => (
                         <Igrac key={player.id} player={player.value} />
-                    ))
+                        ))
+                    : searchResults.map((player) => (
+                        <Igrac key={player.id} player={player} />
+                        ))
                 }
             </tbody>
         </table>
