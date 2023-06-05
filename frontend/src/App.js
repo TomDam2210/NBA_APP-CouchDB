@@ -99,7 +99,7 @@ const App = () => {
 return (
     <div>
         <h1>NBA PLAYERS</h1> 
-        <div>
+        <div className="trazilica">
             <input 
                 type="text"
                 placeholder="Pretraži igrače..."
@@ -107,7 +107,7 @@ return (
                 onChange={(e) => setSearchPlayer(e.target.value)}
             >
             </input>
-            <button onClick={handleSearch}>Pretraži</button>
+            
         </div>
         <table>
             <thead>
