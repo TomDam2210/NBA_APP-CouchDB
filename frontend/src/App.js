@@ -61,6 +61,20 @@ const App = () => {
             console.error(error);
           });
       };
+    
+    const brisiIgraca = (id, rev) => {
+        axios
+          .delete(`http://localhost:3001/api/players/${id}`, {
+            data: {_rev: rev}
+          })
+          .then(() => {
+            setCurrentPage(1); // Vrati se na prvu stranicu
+            getPlayers(); // Osvježi tablicu
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
 
     const handleSearch = () => {
         setCurrentPage(1)
@@ -110,10 +124,10 @@ return (
             <tbody>
                 {searchPlayer === ''
                     ? players.map((player) => (
-                        <Igrac key={player.id} player={player.value} />
+                        <Igrac key={player.id} player={player.value} brisi={() => brisiIgraca(player.id, player.value.rev)}/>
                         ))
                     : searchResults.map((player) => (
-                        <Igrac key={player.id} player={player} />
+                        <Igrac key={player._id} player={player} brisi={() => brisiIgraca(player._id, player._rev)} />
                         ))
                 }
             </tbody>

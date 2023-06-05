@@ -62,6 +62,23 @@ app.post('/api/players/search', (req, res) => {
       });
   });
 
+app.delete('/api/players/:id', (req, res) => {
+    const playerId = req.params.id
+    const rev = req.body._rev
+    console.log(playerId)
+    console.log(rev)
+
+    couch.del(dbName, playerId, rev)
+      .then(() => {
+        console.log('Igrač uspješno izbrisan');
+        res.sendStatus(204); // No Content - uspješno izbrisano
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).json({ error: 'Greška prilikom brisanja igrača' });
+      });
+  });
+
 app.listen(3001, () => {
     console.log("Server je pokrenut!")
 })

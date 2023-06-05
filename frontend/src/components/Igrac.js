@@ -1,6 +1,7 @@
 import React from "react"
+import './Igrac.css'
 
-const Igrac = ({player}) => {
+const Igrac = ({player, brisi}) => {
     return (
         <tr>
             <td>{player.Player}</td>
@@ -10,6 +11,9 @@ const Igrac = ({player}) => {
             <td>{player.born}</td>
             <td>{player.birth_city}</td>
             <td>{player.birth_state}</td>
+            <td>
+                <button onClick={brisi} id="button-brisi">Briši</button>
+            </td>
         </tr>
     )
 }
