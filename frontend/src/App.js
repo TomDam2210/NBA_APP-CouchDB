@@ -49,9 +49,18 @@ const App = () => {
     const searchPlayers = () => {
         const query = {
           selector: {
-            Player: {
-              $regex: `(?i)${searchPlayer}`
-            }
+            $or: [
+              {
+                Player: {
+                  $regex: `(?i)${searchPlayer}`
+                }
+              },
+              {
+                collage: {
+                  $regex: `(?i)${searchPlayer}`
+                }
+              }
+            ]
           },
           limit: pageSize,
           skip: (currentPage - 1) * pageSize
@@ -114,7 +123,7 @@ return (
         <div className="trazilica">
             <input 
                 type="text"
-                placeholder="Pretraži igrače..."
+                placeholder="Pretraži igrače... [Ime/Prezime/Fakultet]"
                 value={searchPlayer}
                 onChange={(e) => setSearchPlayer(e.target.value)}
             >
