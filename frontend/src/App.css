@@ -45,8 +45,18 @@ h1 {
 
 .trazilica input {
     border-radius: 10px;
-    border: 1px solid #ccc;
+    border: 3px solid #002f6d;
     width: 300px;
     padding: 15px;
     margin-bottom: 10px;
+    text-decoration: black;
+}
+
+.forma {
+    margin-left: 300px;
+
+}
+
+.sve {
+    background-color:azure;
 }

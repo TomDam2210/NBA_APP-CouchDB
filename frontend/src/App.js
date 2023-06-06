@@ -4,8 +4,14 @@ import axios from 'axios'
 
 import Igrac from "./components/Igrac"
 import Tipka from "./components/Tipka"
+import Forma from "./components/Forma"
 
 const App = () => {
+    //Prikaz forme
+    const [prikazForme, setPrikazForme] = useState(false);
+    const setPrikazFormeHandler = () => {
+        setPrikazForme(!prikazForme);
+    }
 
     const [players, setPlayers] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
@@ -76,10 +82,16 @@ const App = () => {
           });
       };
 
-    const handleSearch = () => {
-        setCurrentPage(1)
-        /*setSearchPlayer((e.target.value).toString())
-        console.log(searchPlayer)*/
+    const noviIgrac = (noviObjekt) => {
+      axios
+        .post('http://localhost:3001/api/players', noviObjekt)
+        .then((response) => {
+          setCurrentPage(1); // Vrati se na prvu stranicu
+          getPlayers(); // Osvježi tablicu
+        })
+        .catch((error) => {
+          console.error(error);
+      });
     }
 
     const handleNextPage = () => {
@@ -97,7 +109,7 @@ const App = () => {
     
 
 return (
-    <div>
+    <div className="sve">
         <h1>NBA PLAYERS</h1> 
         <div className="trazilica">
             <input 
@@ -109,12 +121,19 @@ return (
             </input>
             
         </div>
+        <div className="forma">
+            <Tipka naslov="NEW PLAYER" klik={setPrikazFormeHandler}/>
+            {prikazForme 
+            ? <Forma odustani={setPrikazFormeHandler} spremiIgraca={noviIgrac} /> 
+            : null}
+
+        </div>
         <table>
             <thead>
                 <tr>
                     <th className="th">Player</th>
-                    <th className="th">Height</th>
-                    <th className="th">Weight</th>
+                    <th className="th">Height [cm]</th>
+                    <th className="th">Weight [kg]</th>
                     <th className="th">Collage</th>
                     <th className="th">Born</th>
                     <th className="th">BirthCity</th>

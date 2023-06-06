@@ -62,6 +62,27 @@ app.post('/api/players/search', (req, res) => {
       });
   });
 
+app.post('/api/players', (req,res) => {
+  const noviObjekt = req.body
+
+  couch.uniqid().then((ids) => {
+    const id = ids[0]
+
+    const noviIgrac = {
+      _id: id,
+      ...noviObjekt
+    }
+    couch.insert(dbName, noviIgrac)
+    .then(() => {
+      console.log('Igrač uspješno spremljen!')
+      res.status(201).json({ message: 'Novi igrač je spremljen!', player: noviIgrac})
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  })
+})
+
 app.delete('/api/players/:id', (req, res) => {
     const playerId = req.params.id
     const rev = req.body._rev
